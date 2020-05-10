@@ -2,6 +2,7 @@
 using Newbe.Mahua;
 using Newbe.Mahua.Plugins.Parrot.MahuaEvents;
 using Newbe.Mahua.MahuaEvents;
+
 namespace Newbe.Mahua.Plugins.Parrot
 {
     /// <summary>
@@ -52,6 +53,10 @@ namespace Newbe.Mahua.Plugins.Parrot
                     .As<IPrivateMessageFromGroupReceivedMahuaEvent>();
                 builder.RegisterType<GroupMessageReceivedMahuaEvent>()
                     .As<IGroupMessageReceivedMahuaEvent>();
+                builder.RegisterType<FriendAddingRequestMahuaEvent>()
+                   .As<IFriendAddingRequestMahuaEvent>();
+                builder.RegisterType<GroupJoiningInvitationReceivedMahuaEvent>()
+                   .As<IGroupJoiningInvitationReceivedMahuaEvent>();
             }
         }
     }

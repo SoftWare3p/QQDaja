@@ -9,7 +9,7 @@ namespace Newbe.Mahua.Plugins.Parrot
         /// <summary>
         /// 版本号，建议采用 主版本.次版本.修订号 的形式
         /// </summary>
-        public string Version { get; set; } = "20.0.0";
+        public string Version { get; set; } = "30.0.0";
 
         /// <summary>
         /// 插件名称
