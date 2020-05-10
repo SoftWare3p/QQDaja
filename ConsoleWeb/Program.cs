@@ -51,20 +51,47 @@ namespace ConsoleWeb
             void getNearest()
             {
                 int index = source.IndexOf(@">&nbsp;</td>");
-                if(index == -1)
+                if (index == -1)
                 {
                     Console.WriteLine(@"没有遗漏打卡的记录");
                     return;
                 }
                 string res = source.Substring(index);
-                index = res.IndexOf(@"疫情防控——师生健康状态采集");
-                res = res.Substring(index-4,4);
-                Console.WriteLine(@"你最近一次遗漏打卡的时间是在" + res[0]+res[1]+"月"+res[2]+res[3]+"日");
+                int index1 = res.IndexOf(@"疫情防控——师生健康状态采集");
+                res = res.Substring(index1 - 4, 4);
+                int day = (res[2] - '0') * 10 + (res[3] - '0');
+                int month = (res[0] - '0') * 10 + (res[1] - '0');
+                if (System.DateTime.Now.Day == day && System.DateTime.Now.Month == month)
+                {
+                    res = source.Substring(index + 5);
+                    index = res.IndexOf(@">&nbsp;</td>");
+                    if (index == -1)
+                    {
+                        Console.WriteLine(@"没有遗漏打卡的记录");
+                        return;
+                    }
+                    res = source.Substring(index);
+                    index1 = res.IndexOf(@"疫情防控——师生健康状态采集");
+                    res = res.Substring(index1 - 4, 4);
+                    day = (res[2] - '0') * 10 + (res[3] - '0');
+                    month = (res[0] - '0') * 10 + (res[1] - '0');
+                }
+                Console.WriteLine(@"你最近一次遗漏打卡的时间是在" + month + "月" + day + "日");
+            }
+            private static void theout(object sender, System.Timers.ElapsedEventArgs e)
+            {
+                Console.WriteLine("响应时间大于10分钟，可能为账号信息错误");
+                Environment.Exit(0);
             }
             public void daka(string[] str)
             {
                 //initWebVisit();
-                browser = new ChromiumWebBrowser("http://login.cuit.edu.cn/Login/xLogin/Login.asp");
+                System.Timers.Timer t = new System.Timers.Timer(600000);
+                //到达时间的时候执行事件；
+                t.Elapsed += new System.Timers.ElapsedEventHandler(theout);
+                t.AutoReset = false;//设置是执行一次（false）还是一直执行(true)； 
+                t.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
+                browser = new ChromiumWebBrowser(@"http://login.cuit.edu.cn/Login/xLogin/Login.asp");
                 browser.FrameLoadEnd += browser_FrameLoadEnd;
                 DocComplete.WaitOne();
                 string script = @"FmLgn.txtId.value = '" + str[0] + "'; FmLgn.txtMM.value = '" + str[1] + "'; FmLgn.txtVC.value = '1';FmLgn.submit();";
@@ -72,16 +99,18 @@ namespace ConsoleWeb
                 DocComplete.WaitOne();
                 DocComplete.WaitOne();
                 DocComplete.WaitOne();
-                browser.Load("http://jszx-jxpt.cuit.edu.cn/Jxgl/Xs/netks/sj.asp");
+                browser.Load(@"http://jszx-jxpt.cuit.edu.cn/Jxgl/Xs/netks/sj.asp");
                 DocComplete.WaitOne();
                 getNearest();
                 script = @"document.getElementsByTagName('a')[1].click();";
                 browser.GetBrowser().MainFrame.ExecuteJavaScriptAsync(script);
                 DocComplete.WaitOne();
                 browser.JsDialogHandler = new JsDialogHandler();
-                script = @"function setV(na, val){document.getElementsByName(na)[0].value = val} setV('sF21650_5','1'); setV('sF21650_6','5'); setV('sF21650_7','1');setV('sF21650_8','1');setV('sF21650_9','1'); FrmXsPj.submit();";
+                DataOprt dataOprt = new DataOprt();
+                string [] sett  = dataOprt.Setting(str[2]);
+                script = @"function setV(na, val){document.getElementsByName(na)[0].value = val} setV('sF21650_5','"+sett[0]+ "'); setV('sF21650_6','" + sett[1] + "'); setV('sF21650_7','" + sett[2] + "');setV('sF21650_8','" + sett[3] + "');setV('sF21650_9','" + sett[4] + "'); FrmXsPj.submit();";
                 browser.GetBrowser().MainFrame.ExecuteJavaScriptAsync(script);
-                while (browser.Address != @"http://jszx-jxpt.cuit.edu.cn/Jxgl/Xs/netks/editSjRs.asp");
+                while (browser.Address != @"http://jszx-jxpt.cuit.edu.cn/Jxgl/Xs/netks/editSjRs.asp") ;
                 browser.GetBrowser().CloseBrowser(true);
             }
 

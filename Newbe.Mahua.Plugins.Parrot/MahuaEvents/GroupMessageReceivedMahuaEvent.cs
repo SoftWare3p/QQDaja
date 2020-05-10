@@ -54,7 +54,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                 {
                     Output = new StringBuilder();
                     Process myProcess = new Process();
-                    myProcess.StartInfo = new ProcessStartInfo(Environment.CurrentDirectory+@"\ConsoleWeb.exe",str[0]+" "+str[1]);
+                    myProcess.StartInfo = new ProcessStartInfo(Environment.CurrentDirectory+@"\ConsoleWeb.exe",str[0]+" "+str[1]+" "+context.FromQq);
                     myProcess.StartInfo.RedirectStandardOutput = true;
                     myProcess.StartInfo.UseShellExecute = false;
                     myProcess.OutputDataReceived += myOutputHandler;
@@ -71,6 +71,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                     iserr = true;
                     _mahuaApi.SendGroupMessage(context.FromGroup)
                     .At(context.FromQq)
+                    .Newline()
                     .Text("打卡失败，错误原因：" + e.Message.ToString())
                     .Done();
                 }
@@ -80,6 +81,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                     oprt1.recordM(context.FromQq);
                     _mahuaApi.SendGroupMessage(context.FromGroup)
                     .At(context.FromQq)
+                    .Newline()
                     .Text("打卡成功！\n")
                     .Text(attetion)
                     .Done();
@@ -88,6 +90,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                 {
                     _mahuaApi.SendGroupMessage(context.FromGroup)
                     .At(context.FromQq)
+                    .Newline()
                     .Text("打卡失败，错误原因：" + Output.ToString())
                     .Done();
                 }
@@ -102,9 +105,13 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                 PluginInfo pluginInfo = new PluginInfo();
                 _mahuaApi.SendGroupMessage(context.FromGroup)
                     .At(context.FromQq)
+                    .Newline()
                     .Text("Name:"+pluginInfo.Name)
+                    .Newline()
                     .Text("Version:" +pluginInfo.Version)
+                    .Newline()
                     .Text("id:" +pluginInfo.Id)
+                    .Newline()
                     .Text("Description:" +pluginInfo.Description)
                     .Done();        
             }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data;
 using System.Data.OleDb;
-namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
+namespace ConsoleWeb
 {
     class SqlOpera
     {

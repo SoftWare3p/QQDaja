@@ -56,16 +56,22 @@ namespace Newbe.Mahua.Plugins.Parrot.Tests
                 //创建需要测试的类，由于使用了Autofac.Extras.Moq，构造函数注入的过程会自动执行
                 IGroupMessageReceivedMahuaEvent @event =
                     mocker.Create<GroupMessageReceivedMahuaEvent>();
+                IPrivateMessageFromFriendReceivedMahuaEvent @event1 =
+                    mocker.Create<PrivateMessageFromFriendReceivedMahuaEvent>();
 
                 // 模拟某人向机器人发送了消息
-                @event.ProcessGroupMessage(new GroupMessageReceivedContext
+                /*@event.ProcessGroupMessage(new GroupMessageReceivedContext
                 {
                     FromGroup="564563435",
-                    FromQq = "1307650694",
+                    FromQq = "794876939",
                     Message = "#打卡",
                     SendTime = DateTime.Now
+                });*/
+                event1.ProcessFriendMessage(new PrivateMessageFromFriendReceivedContext
+                {
+                    FromQq = "318167525",
+                    Message = "#账号 1307650694 1307650694"
                 });
-
                 #endregion
 
                 #region Assert

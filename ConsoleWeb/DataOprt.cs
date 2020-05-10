@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 
-namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
+namespace ConsoleWeb
 {
     class DataOprt
     {
