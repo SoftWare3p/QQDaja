@@ -41,7 +41,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                 _mahuaApi.SendPrivateMessage(context.FromQq)
                  .Text("私聊发送“#账号 账号 密码”以绑定账号")
                  .Newline()
-                 .Text("私聊发送“#设置 数字1 数字2 数字3 数字4 数字5”以设置3个人健康现状 (2)现居住地状态：->(6)家庭成员状况：项目")
+                 .Text("私聊发送“#设置 数字1 数字2 数字3 数字4 数字5”以设置3.个人健康现状 (2)现居住地状态：->(6)家庭成员状况：项目")
                  .Newline()
                  .Text("私聊发送“#解绑”以取消绑定账号")
                  .Newline()
