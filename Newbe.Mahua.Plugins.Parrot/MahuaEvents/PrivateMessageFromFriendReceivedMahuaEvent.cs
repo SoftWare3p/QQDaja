@@ -77,7 +77,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                             .Done();
                     data.Close();
                 }
-                _mahuaApi.SendPrivateMessage(context.FromQq)
+                else _mahuaApi.SendPrivateMessage(context.FromQq)
                             .Text("指令错误！")
                             .Done();
             }

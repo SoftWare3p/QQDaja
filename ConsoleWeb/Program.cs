@@ -80,14 +80,13 @@ namespace ConsoleWeb
             }
             private static void theout(object sender, System.Timers.ElapsedEventArgs e)
             {
-                Console.WriteLine("响应时间大于5分钟，可能为账号信息错误");
+                Console.WriteLine("响应时间大于30秒，可能为账号信息错误");
                 Environment.Exit(0);
             }
             public void daka(string[] str)
             {
                 //initWebVisit();
-                System.Timers.Timer t = new System.Timers.Timer(300000);
-                //到达时间的时候执行事件；
+                System.Timers.Timer t = new System.Timers.Timer(30000);
                 t.Elapsed += new System.Timers.ElapsedEventHandler(theout);
                 t.AutoReset = false;//设置是执行一次（false）还是一直执行(true)； 
                 t.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
