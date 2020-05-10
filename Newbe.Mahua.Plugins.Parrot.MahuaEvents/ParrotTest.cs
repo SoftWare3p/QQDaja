@@ -60,18 +60,18 @@ namespace Newbe.Mahua.Plugins.Parrot.Tests
                     mocker.Create<PrivateMessageFromFriendReceivedMahuaEvent>();
 
                 // 模拟某人向机器人发送了消息
-                /*@event.ProcessGroupMessage(new GroupMessageReceivedContext
+                @event.ProcessGroupMessage(new GroupMessageReceivedContext
                 {
                     FromGroup="564563435",
                     FromQq = "794876939",
                     Message = "#打卡",
                     SendTime = DateTime.Now
-                });*/
-                event1.ProcessFriendMessage(new PrivateMessageFromFriendReceivedContext
+                });
+                /*event1.ProcessFriendMessage(new PrivateMessageFromFriendReceivedContext
                 {
                     FromQq = "318167525",
                     Message = "#账号 1307650694 1307650694"
-                });
+                });*/
                 #endregion
 
                 #region Assert

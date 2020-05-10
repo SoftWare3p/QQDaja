@@ -51,7 +51,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
         {
             string[] str = new string[2];
             str[0] = DateTime.Now.ToLongDateString();
-            if (sqlO.ExecuteSelectCommand(@"select * from sum_acc where sum_date = '" + DateTime.Now.ToLongDateString() + "';") == 1)
+            if (sqlO.ExecuteSelectCommand(@"select * from sum_acc where sum_date = '" + DateTime.Now.ToLongDateString() + "';") >= 0)
             {
                 DataSet dtset = sqlO.GetDataSet(@"select sums from sum_acc where sum_date = '" + DateTime.Now.ToLongDateString() + "';");
                 str[1] = dtset.Tables[0].Rows[0][0].ToString();
@@ -80,8 +80,11 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                     sqlO.close();
                     return;
                 }
-                int nums = int.Parse(sqlO.GetDataSet(@"select sums from sum_acc where (sum_date = '" + DateTime.Now.ToLongDateString() + "')").Tables[0].Rows[0][0].ToString())+1;
-                sqlO.ExecuteCommand(@"update sum_acc set sums = '"+ nums +"' where (sum_date = '" + DateTime.Now.ToLongDateString() + "');");
+                else
+                {
+                    int nums = int.Parse(sqlO.GetDataSet(@"select sums from sum_acc where (sum_date = '" + DateTime.Now.ToLongDateString() + "')").Tables[0].Rows[0][0].ToString()) + 1;
+                    sqlO.ExecuteCommand(@"update sum_acc set sums = '" + nums + "' where (sum_date = '" + DateTime.Now.ToLongDateString() + "');");
+                }
                 sqlO.close();
             }
         }
