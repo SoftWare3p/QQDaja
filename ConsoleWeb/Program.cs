@@ -82,7 +82,7 @@ namespace ConsoleWeb
             private static void theout(object sender, System.Timers.ElapsedEventArgs e)
             {
                 Console.WriteLine("响应时间大于30秒，可能为账号信息错误");
-                Environment.Exit(0);
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
             }
             public void daka(string[] str)
             {
