@@ -66,7 +66,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
         }
         public void recordM(string qq)
         {
-            if (sqlO.ExecuteSelectCommand(@"select * from pick_acc where sum_date = '" + DateTime.Now.ToLongDateString() + "'and QQid ='"+ qq + "';") == 1)
+            if (sqlO.ExecuteSelectCommand(@"select * from pick_acc where sum_date = '" + DateTime.Now.ToLongDateString() + "'and QQid ='"+ qq + "';") >= 0)
             {
                 sqlO.close();
                 return;

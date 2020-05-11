@@ -57,20 +57,21 @@ namespace ConsoleWeb
                     return;
                 }
                 string res = source.Substring(index);
+                source = source.Substring(index);
                 int index1 = res.IndexOf(@"疫情防控——师生健康状态采集");
                 res = res.Substring(index1 - 4, 4);
                 int day = (res[2] - '0') * 10 + (res[3] - '0');
                 int month = (res[0] - '0') * 10 + (res[1] - '0');
                 if (System.DateTime.Now.Day == day && System.DateTime.Now.Month == month)
                 {
-                    res = source.Substring(index + 5);
+                    res = source.Substring(index1 + 5);
                     index = res.IndexOf(@">&nbsp;</td>");
                     if (index == -1)
                     {
                         Console.WriteLine(@"没有遗漏打卡的记录");
                         return;
                     }
-                    res = source.Substring(index);
+                    res = res.Substring(index);
                     index1 = res.IndexOf(@"疫情防控——师生健康状态采集");
                     res = res.Substring(index1 - 4, 4);
                     day = (res[2] - '0') * 10 + (res[3] - '0');
