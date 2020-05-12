@@ -163,6 +163,8 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                     .Text("id:" + pluginInfo.Id)
                     .Newline()
                     .Text("Description:" + pluginInfo.Description)
+                    .Newline()
+                    .Text(@"开源地址：https://github.com/SoftWare3p/QQDaja")
                     .Done();
             }
             else
