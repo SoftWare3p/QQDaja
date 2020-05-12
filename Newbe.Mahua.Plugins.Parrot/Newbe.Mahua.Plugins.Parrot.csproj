@@ -167,9 +167,6 @@
     <Content Include="buildScripts\VSSetup\2.2.5\VSSetup.psm1" />
     <Content Include="buildScripts\VSSetup\2.2.5\VSSetup.types.ps1xml" />
     <Content Include="buildTools\nuget.exe" />
-    <Content Include="Database.mdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
