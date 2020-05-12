@@ -113,6 +113,11 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
         }
         public void Setting(string qq, string [] res,int index)
         {
+            res[index + 0] = (int.Parse(res[index + 0])).ToString();
+            res[index + 1] = (int.Parse(res[index + 1])).ToString();
+            res[index + 2] = (int.Parse(res[index + 2])).ToString();
+            res[index + 3] = (int.Parse(res[index + 3])).ToString();
+            res[index + 4] = (int.Parse(res[index + 4])).ToString();
             if (sqlO.ExecuteSelectCommand(@"Select * from setting where QQid = '" + qq + "';") >= 0)
                 sqlO.ExecuteCommand(@"update setting set sF5 = '" + res[index+0] + "', sF6 = '" + res[index +1] + "',sF7 = '" + res[index +2] + "',sF8 = '" + res[index +3] + "', sF9 = '" + res[index +4] +"' where QQid = '" + qq + "';");
             else
