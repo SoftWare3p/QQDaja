@@ -34,6 +34,14 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                         .Text("记录成功！")
                         .Done();
                 }
+                else if(res.Length == 4)
+                {
+                    DataOprt data = new DataOprt();
+                    data.regaccount(context.FromQq, res[1], res[2], res[3]);
+                    _mahuaApi.SendPrivateMessage(context.FromQq)
+                        .Text("记录成功！")
+                        .Done();
+                }
                 else _mahuaApi.SendPrivateMessage(context.FromQq)
                             .Text("指令错误！")
                             .Done();
@@ -43,7 +51,9 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                 _mahuaApi.SendPrivateMessage(context.FromQq)
                  .Text("私聊发送“#账号 账号 密码”以绑定账号")
                  .Newline()
-                 .Text("私聊发送“#设置 数字1 数字2 数字3 数字4 数字5”以设置3.个人健康现状 (2)现居住地状态：->(6)家庭成员状况：项目")
+                 .Text("私聊发送“#账号 账号 密码 群号”以在好友私聊模式下绑定来自某个群成员的账号")
+                 .Newline()
+                 .Text("私聊发送“#设置 数字1 数字2 数字3 数字4 数字5”以设置个人健康现状的部分项目（详细请参见此QQ的空间说说）")
                  .Newline()
                  .Text("私聊发送“#解绑”以取消绑定账号")
                  .Newline()

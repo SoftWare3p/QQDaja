@@ -29,7 +29,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                 if (res.Length == 3)
                 {
                     DataOprt data = new DataOprt();
-                    data.regaccount(context.FromQq, res[1], res[2]);
+                    data.regaccount(context.FromQq, res[1], res[2], context.FromGroup);
                     _mahuaApi.SendPrivateMessage(context.FromQq)
                         .Text("记录成功！")
                         .Done();
@@ -43,7 +43,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                 _mahuaApi.SendPrivateMessage(context.FromQq)
                  .Text("私聊发送“#账号 账号 密码”以绑定账号")
                  .Newline()
-                 .Text("私聊发送“#设置 数字1 数字2 数字3 数字4 数字5”以设置3.个人健康现状 (2)现居住地状态：->(6)家庭成员状况：项目")
+                 .Text("私聊发送“#设置 数字1 数字2 数字3 数字4 数字5”以设置个人健康现状的部分项目（详细请参见此QQ的空间说说）")
                  .Newline()
                  .Text("私聊发送“#解绑”以取消绑定账号")
                  .Newline()
@@ -71,14 +71,14 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                             .Text("设置失败！，原因：" + e.Message.ToCharArray())
                             .Done();
                     }
-                    if(isfine)
+                    if (isfine)
                         _mahuaApi.SendPrivateMessage(context.FromQq)
                             .Text("设置成功！")
                             .Done();
                     data.Close();
-                }else _mahuaApi.SendPrivateMessage(context.FromQq)
-                            .Text("指令错误！")
-                            .Done();
+                } else _mahuaApi.SendPrivateMessage(context.FromQq)
+                             .Text("指令错误！")
+                             .Done();
             }
             else if (res[0] == "#统计信息")
             {
@@ -166,6 +166,16 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                     .Newline()
                     .Text(@"开源地址：https://github.com/SoftWare3p/QQDaja")
                     .Done();
+            }
+            else if (res[0] == "#群内查询")
+            {
+                DataOprt oprt1 = new DataOprt();
+                string msg = oprt1.queryGroup(context.FromGroup);
+                msg = "当日未打卡QQ:" + msg;
+                _mahuaApi.SendPrivateMessage(context.FromQq)
+                    .Text(msg)
+                    .Done();
+                oprt1.Close();
             }
             else
                 _mahuaApi.SendPrivateMessage(context.FromQq)

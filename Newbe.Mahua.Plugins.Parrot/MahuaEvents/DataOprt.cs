@@ -47,6 +47,26 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
             }
             sqlO.close();
         }
+        public void regaccount(string qq, string name, string pwd, string group)
+        {
+            if (sqlO.ExecuteSelectCommand(@"select * from account where QQid = '" + qq + "';") >= 0)
+            {
+                sqlO.ExecuteCommand(@"update account set login_name = '" + name + "', Login_password = '" + pwd + "',FromGroup = '"+group+"' where QQid = '" + qq + "';");
+            }
+            else
+            {
+                sqlO.ExecuteCommand(@"insert into account (QQid, login_name, Login_password,FromGroup) values('" + qq + "','" + name + "','" + pwd + "','"  + group +"');");
+            }
+            if (sqlO.ExecuteSelectCommand(@"select * from account1 where QQid = '" + qq + "';") >= 0)
+            {
+                sqlO.ExecuteCommand(@"update account1 set login_name = '" + name + "', Login_password = '" + pwd + "' where QQid = '" + qq + "';");
+            }
+            else
+            {
+                sqlO.ExecuteCommand(@"insert into account1 (QQid, login_name, Login_password) values('" + qq + "','" + name + "','" + pwd + "');");
+            }
+            sqlO.close();
+        }
         public string[] queryuse()
         {
             string[] str = new string[2];
@@ -130,6 +150,26 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
         public int deleteAcc(string qq)
         {
             return sqlO.ExecuteCommand(@"delete from account where QQid = '" + qq + "';");
+        }
+        public int GroupQuery(string group)
+        {
+            return sqlO.ExecuteSelectCommand(@"Select ID from group_list where QQgroup = '"+group+"';");
+        }
+        public int regGroup(string group)
+        {
+            return GroupQuery(group);
+        }
+        public string queryGroup(string group)
+        {
+            string setsum ="";
+            DataSet set1 = sqlO.GetDataSet(@"select QQid from account where FromGroup ='"+ group+"';");
+            for (int i = 0; i < set1.Tables[0].Rows.Count;i++)
+            {
+                string qqid = set1.Tables[0].Rows[i][0].ToString();
+                if (sqlO.ExecuteSelectCommand(@"select * from pick_acc where (QQid = '" + qqid + "' and sum_date = '"+ DateTime.Now.ToLongDateString() + "');") == -1)
+                    setsum += qqid + "、";
+            }
+            return setsum;
         }
     }
 }

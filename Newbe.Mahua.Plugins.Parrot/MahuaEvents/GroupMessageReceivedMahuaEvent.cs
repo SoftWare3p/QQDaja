@@ -25,15 +25,15 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
             // todo 填充处理逻辑
             char[] spchar = { ' ' };
             string[] res = context.Message.Split(spchar, options: StringSplitOptions.RemoveEmptyEntries);
-            if(res[0] == "#统计信息")
+            if (res[0] == "#统计信息")
             {
                 DataOprt dtoprt = new DataOprt();
-                string [] result = dtoprt.queryuse();
+                string[] result = dtoprt.queryuse();
                 _mahuaApi.SendGroupMessage(context.FromGroup)
                     .At(context.FromQq)
                     .Text(result[0] + "打卡人数：" + result[1])
                     .Done();
-            }else if (res[0] == "#打卡")
+            } else if (res[0] == "#打卡")
             {
                 bool iserr = false;
                 DataOprt oprt = new DataOprt();
@@ -46,15 +46,15 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                         .Done();
                     return;
                 }
-                char[] spchar1 = { '[','0',']',' ','-',' ','\r','\n'};
+                char[] spchar1 = { '[', '0', ']', ' ', '-', ' ', '\r', '\n' };
                 string[] outputR = new string[1];
-                string attetion ="";
+                string attetion = "";
                 string isright = "";
                 try
                 {
                     Output = new StringBuilder();
                     Process myProcess = new Process();
-                    myProcess.StartInfo = new ProcessStartInfo(Environment.CurrentDirectory+@"\ConsoleWeb.exe",str[0]+" "+str[1]+" "+context.FromQq);
+                    myProcess.StartInfo = new ProcessStartInfo(Environment.CurrentDirectory + @"\ConsoleWeb.exe", str[0] + " " + str[1] + " " + context.FromQq);
                     myProcess.StartInfo.RedirectStandardOutput = true;
                     myProcess.StartInfo.UseShellExecute = false;
                     myProcess.OutputDataReceived += myOutputHandler;
@@ -66,7 +66,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                         attetion += outputR[i];
                     isright = outputR[outputR.Length - 1];
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     iserr = true;
                     _mahuaApi.SendGroupMessage(context.FromGroup)
@@ -94,26 +94,26 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                     .Text("打卡失败，错误原因：" + Output.ToString())
                     .Done();
                 }
-            }else if(res[0] == "#robot_path")
+            } else if (res[0] == "#robot_path")
             {
                 _mahuaApi.SendGroupMessage(context.FromGroup)
                     .At(context.FromQq)
                     .Text(System.Environment.CurrentDirectory)
                     .Done();
-            }else if(res[0] == "#程序信息")
+            } else if (res[0] == "#程序信息")
             {
                 PluginInfo pluginInfo = new PluginInfo();
                 _mahuaApi.SendGroupMessage(context.FromGroup)
                     .At(context.FromQq)
                     .Newline()
-                    .Text("Name:"+pluginInfo.Name)
+                    .Text("Name:" + pluginInfo.Name)
                     .Newline()
-                    .Text("Version:" +pluginInfo.Version)
+                    .Text("Version:" + pluginInfo.Version)
                     .Newline()
-                    .Text("id:" +pluginInfo.Id)
+                    .Text("id:" + pluginInfo.Id)
                     .Newline()
-                    .Text("Description:" +pluginInfo.Description)
-                    .Done();        
+                    .Text("Description:" + pluginInfo.Description)
+                    .Done();
             }
         }
         private static void myOutputHandler(object sendingProcess,
