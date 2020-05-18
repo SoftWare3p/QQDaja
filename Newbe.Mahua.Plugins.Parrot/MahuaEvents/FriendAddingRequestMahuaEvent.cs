@@ -20,7 +20,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
         public void ProcessAddingFriendRequest(FriendAddingRequestContext context)
         {
             // todo 填充处理逻辑
-            _mahuaApi.AcceptFriendAddingRequest(context.AddingFriendRequestId,context.FromQq,context.FromQq);
+            _mahuaApi.AcceptFriendAddingRequest(context.AddingFriendRequestId,context.FromQq,"QQ："+ context.FromQq);
             
         }
     }

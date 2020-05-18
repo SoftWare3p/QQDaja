@@ -51,8 +51,6 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                  .Newline()
                  .Text(@"在群内\私聊发送#统计信息 以统计打卡信息（当天人数）")
                  .Newline()
-                 .Text(@"私聊发送“#注册提醒”，在晚上9点以后如果你还没有使用本助手打卡，QQ会收到提示打卡的信息，私聊发送“#删除提醒”以解除提醒")
-                 .Newline()
                  .Text(@"在群内\私聊发送#程序信息 以查看此程序的一些没什么用的信息")
                  .Done();
             }
@@ -126,6 +124,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                 {
                     iserr = true;
                     _mahuaApi.SendPrivateMessage(context.FromQq)
+                    .Newline()
                     .Text("打卡失败，错误原因：" + e.Message.ToString())
                     .Done();
                 }
@@ -134,6 +133,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                     DataOprt oprt1 = new DataOprt();
                     oprt1.recordM(context.FromQq);
                     _mahuaApi.SendPrivateMessage(context.FromQq)
+                    .Newline()
                     .Text("打卡成功！\n")
                     .Text(attetion)
                     .Done();
@@ -141,6 +141,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                 else
                 {
                     _mahuaApi.SendPrivateMessage(context.FromQq)
+                    .Newline()
                     .Text("打卡失败，错误原因：" + Output.ToString())
                     .Done();
                 }
@@ -175,43 +176,6 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                     .Text(msg)
                     .Done();
                 oprt1.Close();
-            }
-            else if(res[0] == "#注册提醒")
-            {
-                DataOprt oprt = new DataOprt();
-                string[] str = oprt.pickdaily(context.FromQq);
-                if (str[0] == "无")
-                {
-                    _mahuaApi.SendPrivateMessage(context.FromQq)
-                        .Text("账号尚未绑定！")
-                        .Done();
-                    return;
-                }
-                oprt = new DataOprt();
-                if (oprt.RecordTips(context.FromQq))
-                {
-                    _mahuaApi.SendPrivateMessage(context.FromQq)
-                        .Text("注册提醒成功！")
-                        .Done();
-                }
-                else
-                {
-                    _mahuaApi.SendPrivateMessage(context.FromQq)
-                       .Text("该QQ已经注册！")
-                       .Done();
-                }
-            }
-            else if (res[0] == "#删除提醒")
-            {
-                DataOprt oprt = new DataOprt();
-                if (oprt.DeleteTips(context.FromQq))
-                    _mahuaApi.SendPrivateMessage(context.FromQq)
-                        .Text("删除提醒成功！")
-                        .Done();
-                else _mahuaApi.SendPrivateMessage(context.FromQq)
-                        .Text("该QQ未曾注册提醒！")
-                        .Done();
-                oprt.Close();
             }
             else
                 _mahuaApi.SendPrivateMessage(context.FromQq)
