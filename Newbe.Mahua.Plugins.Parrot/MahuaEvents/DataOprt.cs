@@ -171,5 +171,31 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
             }
             return setsum;
         }
+        public DataSet getPushList()
+        {
+            return sqlO.GetDataSet(@"Select QQid from Rsetting");
+        }
+        public int verQQ(string QQ)
+        {
+            return sqlO.ExecuteSelectCommand(@"Select * from pick_acc where sum_date = '"+ DateTime.Now.ToLongDateString() + "' and QQid = '"+QQ+"';");
+        }
+        public bool RecordTips(string QQ)
+        {
+            if (sqlO.ExecuteSelectCommand(@"Select * from Rsetting where QQid = '"+QQ+"';") < 0)
+            {
+                sqlO.ExecuteCommand(@"insert into Rsetting (QQid) values('" + QQ + "');");
+                sqlO.close();
+                return true;
+            }
+            else
+            {
+                sqlO.close();
+                return false;
+            }
+        }
+        public bool DeleteTips(string QQ)
+        {
+            return (sqlO.ExecuteCommand(@"Delete from Rsetting where QQid = '" + QQ + "';") >= 1);
+        }
     }
 }
