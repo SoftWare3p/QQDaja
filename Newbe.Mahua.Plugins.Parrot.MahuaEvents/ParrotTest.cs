@@ -78,7 +78,7 @@ namespace Newbe.Mahua.Plugins.Parrot.Tests
                 {
                     FromGroup = "109228848",
                     FromQq = "2081559194",
-                    Message = "#群内查询"
+                    Message = "#注册提醒"
                 });
                 #endregion
 

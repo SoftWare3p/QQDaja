@@ -57,7 +57,9 @@ namespace Newbe.Mahua.Plugins.Parrot
                    .As<IFriendAddingRequestMahuaEvent>();
                 builder.RegisterType<GroupJoiningInvitationReceivedMahuaEvent>()
                    .As<IGroupJoiningInvitationReceivedMahuaEvent>();
-            }
+                builder.RegisterType<InitializationMahuaEvent>()
+                   .As<IInitializationMahuaEvent>();
+            }  
         }
     }
 }
