@@ -45,6 +45,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
             {
                 sqlO.ExecuteCommand(@"insert into account1 (QQid, login_name, Login_password) values('" + qq + "','" + name + "','" + pwd + "');");
             }
+            RecordTips(qq);
             sqlO.close();
         }
         public void regaccount(string qq, string name, string pwd, string group)
@@ -65,6 +66,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
             {
                 sqlO.ExecuteCommand(@"insert into account1 (QQid, login_name, Login_password) values('" + qq + "','" + name + "','" + pwd + "');");
             }
+            RecordTips(qq);
             sqlO.close();
         }
         public string[] queryuse()
@@ -149,6 +151,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
         }
         public int deleteAcc(string qq)
         {
+            DeleteTips(qq);
             return sqlO.ExecuteCommand(@"delete from account where QQid = '" + qq + "';");
         }
         public int GroupQuery(string group)
