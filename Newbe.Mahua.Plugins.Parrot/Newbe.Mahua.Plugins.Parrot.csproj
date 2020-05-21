@@ -91,6 +91,7 @@
     <Compile Include="MahuaEvents\PrivateMessageFromGroupReceivedMahuaEvent.cs" />
     <Compile Include="MahuaEvents\SqlOpera.cs" />
     <Compile Include="MahuaModule.cs" />
+    <Compile Include="MahuaService\TickServices.cs" />
     <Compile Include="MyMenuProvider.cs" />
     <Compile Include="PluginInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

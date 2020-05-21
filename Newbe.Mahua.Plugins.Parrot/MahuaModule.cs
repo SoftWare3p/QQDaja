@@ -2,7 +2,7 @@
 using Newbe.Mahua;
 using Newbe.Mahua.Plugins.Parrot.MahuaEvents;
 using Newbe.Mahua.MahuaEvents;
-
+using Newbe.Mahua.Plugins.Parrot.MahuaService;
 namespace Newbe.Mahua.Plugins.Parrot
 {
     /// <summary>
@@ -17,6 +17,7 @@ namespace Newbe.Mahua.Plugins.Parrot
             {
                 new PluginModule(),
                 new MahuaEventsModule(),
+                new ServiceModule(),
             };
         }
 
@@ -60,6 +61,14 @@ namespace Newbe.Mahua.Plugins.Parrot
                 builder.RegisterType<InitializationMahuaEvent>()
                    .As<IInitializationMahuaEvent>();
             }  
+        }
+        private class ServiceModule : Module
+        {
+            protected override void Load(ContainerBuilder builder)
+            {
+                base.Load(builder); // 确保Web服务是单例
+                builder.RegisterType<TickServices>() .As<ITickServices>() .AsSelf();
+            }
         }
     }
 }
