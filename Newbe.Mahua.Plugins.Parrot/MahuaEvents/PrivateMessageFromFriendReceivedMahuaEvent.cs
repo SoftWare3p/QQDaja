@@ -17,8 +17,11 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
             IMahuaApi mahuaApi)
         {
             _mahuaApi = mahuaApi;
+            if(debug == null)
+            debug = DateTime.Now.ToLongTimeString();
         }
         private static StringBuilder Output = null;
+        static string debug = null;
         public void ProcessFriendMessage(PrivateMessageFromFriendReceivedContext context)
         {
             // todo 填充处理逻辑
@@ -46,16 +49,40 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                             .Text("指令错误！")
                             .Done();
             }
+            else if(res[0] == "#提醒" && context.FromQq == "1307650694")
+            {
+
+                if (System.DateTime.Now.Hour >= 21)
+                {
+                    Newbe.Mahua.Plugins.Parrot.MahuaEvents.DataOprt dataOprt = new Newbe.Mahua.Plugins.Parrot.MahuaEvents.DataOprt();
+                    System.Data.DataSet list = dataOprt.getPushList();
+                    for (int i = 0; i < list.Tables[0].Rows.Count; i++)
+                    {
+                        if (dataOprt.verQQ(list.Tables[0].Rows[i][0].ToString()) == -1)
+                        {
+                            _mahuaApi.SendPrivateMessage(list.Tables[0].Rows[i][0].ToString())
+                                .Text("你今天尚未使用本助手打卡！")
+                                .Done();
+                        }
+                    }
+                    _mahuaApi.SendPrivateMessage("1307650694")
+                                .Text("我就看看提醒灵不灵" + System.DateTime.Now.Hour.ToString())
+                                .Done();
+                    dataOprt.Close();
+                }
+            }
             else if (res[0] == "#help")
             {
                 _mahuaApi.SendPrivateMessage(context.FromQq)
-                 .Text("私聊发送“#账号 账号 密码”以绑定账号")
+                 .Text("私聊发送“#账号 教务处账号 密码”以绑定账号")
                  .Newline()
-                 .Text("私聊发送“#账号 账号 密码 群号”以在好友私聊模式下绑定来自某个群成员的账号")
+                 .Text("私聊发送“#账号 教务处账号 密码 群号”以在好友私聊模式下绑定来自某个群成员的账号")
                  .Newline()
                  .Text("私聊发送“#设置 数字1 数字2 数字3 数字4 数字5”以设置个人健康现状的部分项目（详细请参见此QQ的空间说说）")
                  .Newline()
                  .Text("私聊发送“#解绑”以取消绑定账号")
+                 .Newline()
+                 .Text("私聊发送“#注册提醒”，如果你当天未使用机器人打卡，机器人将在21点后提醒你，私聊发送“#取消提醒”可取消")
                  .Newline()
                  .Text(@"在群内\私聊发送“#打卡”以打卡")
                  .Newline()
