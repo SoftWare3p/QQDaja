@@ -27,6 +27,23 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
             sqlO.close();
             return str;
         }
+        public bool SetAuto(string qq)
+        {
+            if (sqlO.ExecuteSelectCommand(@"Select * from pick_auto where(QQid = '" + qq + "');") != -1)
+            {
+                sqlO.ExecuteCommand(@"insert into pick_auto (QQid) values('"+qq+"')");
+                return true;
+            }
+            else return false;
+        }
+        public bool DelAuto(string qq)
+        {
+            return sqlO.ExecuteCommand(@"delete from pick_auto where(QQid = '" + qq + "');") > 0;
+        }
+        public DataSet getAutoList()
+        {
+            return sqlO.GetDataSet(@"Select QQid from pick_auto");
+        }
         public void regaccount(string qq, string name, string pwd)
         {
             if (sqlO.ExecuteSelectCommand(@"select * from account where QQid = '" + qq + "';") >= 0)
