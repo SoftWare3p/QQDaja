@@ -75,15 +75,15 @@ namespace Newbe.Mahua.Plugins.Parrot.Tests
                     FromQq = "318167525",
                     Message = "#debug"
                 });*/
-                event3.Initialized(new InitializedContext
+                /*event3.Initialized(new InitializedContext
                 {
-                });/**/
-                /*event2.ProcessGroupMessage(new PrivateMessageFromGroupReceivedContext
+                });*/
+                event2.ProcessGroupMessage(new PrivateMessageFromGroupReceivedContext
                 {
                     FromGroup = "109228848",
                     FromQq = "2081559194",
-                    Message = "#注册提醒"
-                });*/
+                    Message = "#自动打卡"
+                });/**/
                 #endregion
 
                 #region Assert

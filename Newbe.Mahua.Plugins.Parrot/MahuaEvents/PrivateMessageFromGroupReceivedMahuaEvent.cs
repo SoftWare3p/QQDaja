@@ -49,12 +49,47 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                  .Newline()
                  .Text("私聊发送“#注册提醒”，如果你当天未使用机器人打卡，机器人将在21点后提醒你，私聊发送“#取消提醒”可取消")
                  .Newline()
+                 .Text("私聊发送“#自动打卡”，机器人会在当天中午12点打卡，私聊发送“#取消自动”可取消")
+                 .Newline()
                  .Text(@"在群内\私聊发送“#打卡”以打卡")
                  .Newline()
                  .Text(@"在群内\私聊发送#统计信息 以统计打卡信息（当天人数）")
                  .Newline()
                  .Text(@"在群内\私聊发送#程序信息 以查看此程序的一些没什么用的信息")
                  .Done();
+            }
+            else if (res[0] == "#自动打卡")
+            {
+                DataOprt oprt = new DataOprt();
+                string[] str = oprt.pickdaily(context.FromQq);
+                if (str[0] == "无")
+                {
+                    _mahuaApi.SendPrivateMessage(context.FromQq)
+                        .Text("账号尚未绑定！")
+                        .Done();
+                    return;
+                }
+                oprt = new DataOprt();
+                if (oprt.SetAuto(context.FromQq))
+                    _mahuaApi.SendPrivateMessage(context.FromQq)
+                        .Text("设定自动打卡成功！")
+                        .Done();
+                else _mahuaApi.SendPrivateMessage(context.FromQq)
+                        .Text("你已经设定了自动打卡！")
+                        .Done();
+                oprt.Close();
+            }
+            else if (res[0] == "#取消自动")
+            {
+                DataOprt oprt = new DataOprt();
+                if (oprt.DelAuto(context.FromQq))
+                    _mahuaApi.SendPrivateMessage(context.FromQq)
+                        .Text("成功取消自动打卡！")
+                        .Done();
+                else _mahuaApi.SendPrivateMessage(context.FromQq)
+                        .Text("你设定自动打卡！")
+                        .Done();
+                oprt.Close();
             }
             else if (res[0] == "#设置")
             {
@@ -127,6 +162,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                     iserr = true;
                     _mahuaApi.SendPrivateMessage(context.FromQq)
                     .Text("打卡失败，错误原因：" + e.Message.ToString())
+                    .Text("\n 请翻阅此QQ的空间了解更新信息~")
                     .Done();
                 }
                 if (!iserr && isright == "无错")
@@ -136,12 +172,14 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                     _mahuaApi.SendPrivateMessage(context.FromQq)
                     .Text("打卡成功！\n")
                     .Text(attetion)
+                    .Text("\n 请翻阅此QQ的空间了解更新信息~")
                     .Done();
                 }
                 else
                 {
                     _mahuaApi.SendPrivateMessage(context.FromQq)
                     .Text("打卡失败，错误原因：" + Output.ToString())
+                    .Text("\n 请翻阅此QQ的空间了解更新信息~")
                     .Done();
                 }
             }

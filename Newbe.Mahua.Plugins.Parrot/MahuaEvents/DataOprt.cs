@@ -29,9 +29,9 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
         }
         public bool SetAuto(string qq)
         {
-            if (sqlO.ExecuteSelectCommand(@"Select * from pick_auto where(QQid = '" + qq + "');") != -1)
+            if (sqlO.ExecuteSelectCommand(@"Select * from pick_auto where(QQid = '" + qq + "');") == -1)
             {
-                sqlO.ExecuteCommand(@"insert into pick_auto (QQid) values('"+qq+"')");
+                sqlO.ExecuteCommand(@"insert into pick_auto (QQid) values('"+qq+"');");
                 return true;
             }
             else return false;
@@ -169,6 +169,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
         public int deleteAcc(string qq)
         {
             DeleteTips(qq);
+            DelAuto(qq);
             return sqlO.ExecuteCommand(@"delete from account where QQid = '" + qq + "';");
         }
         public int GroupQuery(string group)

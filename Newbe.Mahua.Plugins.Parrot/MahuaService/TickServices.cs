@@ -12,10 +12,8 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaService
     }
     class TickServices: ITickServices
     {
-        private readonly IMahuaApi _mahuaApi;
-        public TickServices(IMahuaApi mahuaApi)
-        {
-            _mahuaApi = mahuaApi;       
+        public TickServices()
+        {  
         }
         System.Timers.Timer t;
         public Task StartAsync()
@@ -24,12 +22,16 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaService
             t.Elapsed += new System.Timers.ElapsedEventHandler(Theout);
             t.AutoReset = true;//true
             t.Enabled = true;
-            _mahuaApi.SendPrivateMessage(@"1307650694")
-            .Text(@"初始化成功")
-            .Done();
+            Task.Factory.StartNew(() => {
+                using (var robotSession = MahuaRobotManager.Instance.CreateSession())
+                {
+                    var api = robotSession.MahuaApi;
+                    api.SendPrivateMessage(@"1307650694", @"初始化成功");
+                }
+            });
             return Task.FromResult(0);
         }
-        private static StringBuilder Output = null;
+        static StringBuilder Output;
         private static void Theout(object sender, System.Timers.ElapsedEventArgs e)
         {
             if (System.DateTime.Now.Hour >= 21)
@@ -58,7 +60,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaService
                 });
                 dataOprt.Close();
             }
-            else if (System.DateTime.Now.Hour == 3)
+            else if (System.DateTime.Now.Hour == 12)
             {
                 
                 Newbe.Mahua.Plugins.Parrot.MahuaEvents.DataOprt dataOprt = new Newbe.Mahua.Plugins.Parrot.MahuaEvents.DataOprt();
@@ -134,8 +136,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaService
             {
 
                 // Add the text to the collected output.
-                Output.Append(Environment.NewLine +
-                    $"[{0}] - {outLine.Data}");
+                Output.Append(Environment.NewLine + $"[{0}] - {outLine.Data}");
             }
         }
     }
