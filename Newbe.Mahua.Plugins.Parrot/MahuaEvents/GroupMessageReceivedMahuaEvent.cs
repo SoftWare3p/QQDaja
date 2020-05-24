@@ -84,6 +84,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                     .Newline()
                     .Text("打卡成功！\n")
                     .Text(attetion)
+                    .Text("\n 请翻阅此QQ的空间了解更新信息~")
                     .Done();
                 }
                 else

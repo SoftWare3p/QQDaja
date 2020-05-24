@@ -65,10 +65,62 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                                 .Done();
                         }
                     }
-                    _mahuaApi.SendPrivateMessage("1307650694")
-                                .Text("我就看看提醒灵不灵" + System.DateTime.Now.Hour.ToString())
-                                .Done();
                     dataOprt.Close();
+                }
+            }
+            else if(res[0] == "#自动debug" && context.FromQq == "1307650694")
+            {
+                DataOprt dataOprt = new DataOprt();
+                System.Data.DataSet list = dataOprt.getAutoList();
+                dataOprt.Close();
+                for (int i = 0; i < list.Tables[0].Rows.Count; i++)
+                {
+                    string qq = list.Tables[0].Rows[i][0].ToString();
+                    bool iserr = false;
+                    dataOprt = new DataOprt();
+                    string[] str = dataOprt.pickdaily(qq);
+                    char[] spchar1 = { '[', '0', ']', ' ', '-', ' ', '\r', '\n' };
+                    string[] outputR = new string[1];
+                    string attetion = "";
+                    string isright = "";
+                    try
+                    {
+                        Output = new StringBuilder();
+                        Process myProcess = new Process();
+                        myProcess.StartInfo = new ProcessStartInfo(Environment.CurrentDirectory + @"\ConsoleWeb.exe", str[0] + " " + str[1] + " " + context.FromQq);
+                        myProcess.StartInfo.RedirectStandardOutput = true;
+                        myProcess.StartInfo.UseShellExecute = false;
+                        myProcess.OutputDataReceived += myOutputHandler;
+                        myProcess.Start();
+                        myProcess.BeginOutputReadLine();
+                        myProcess.WaitForExit();
+                        outputR = Output.ToString().Split(spchar1, options: StringSplitOptions.RemoveEmptyEntries); ;
+                        for (int ii = 0; ii < outputR.Length - 1; ii++)
+                            attetion += outputR[ii];
+                        isright = outputR[outputR.Length - 1];
+                    }
+                    catch (Exception e)
+                    {
+                        iserr = true;
+                        _mahuaApi.SendPrivateMessage(qq)
+                        .Text("打卡失败，错误原因：" + e.Message.ToString())
+                        .Done();
+                    }
+                    if (!iserr && isright == "无错")
+                    {
+                        DataOprt oprt1 = new DataOprt();
+                        oprt1.recordM(qq);
+                        _mahuaApi.SendPrivateMessage(qq)
+                        .Text("打卡成功！\n")
+                        .Text(attetion)
+                        .Done();
+                    }
+                    else
+                    {
+                        _mahuaApi.SendPrivateMessage(qq)
+                        .Text("打卡失败，错误原因：" + Output.ToString())
+                        .Done();
+                    }
                 }
             }
             else if (res[0] == "#help")
@@ -84,12 +136,47 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                  .Newline()
                  .Text("私聊发送“#注册提醒”，如果你当天未使用机器人打卡，机器人将在21点后提醒你，私聊发送“#取消提醒”可取消")
                  .Newline()
+                 .Text("私聊发送“#自动打卡”，机器人会在当天中午12点打卡，私聊发送“#取消自动”可取消")
+                 .Newline()
                  .Text(@"在群内\私聊发送“#打卡”以打卡")
                  .Newline()
                  .Text(@"在群内\私聊发送#统计信息 以统计打卡信息（当天人数）")
                  .Newline()
                  .Text(@"在群内\私聊发送#程序信息 以查看此程序的一些没什么用的信息")
                  .Done();
+            }
+            else if(res[0] == "#自动打卡")
+            {
+                DataOprt oprt = new DataOprt();
+                string[] str = oprt.pickdaily(context.FromQq);
+                if (str[0] == "无")
+                {
+                    _mahuaApi.SendPrivateMessage(context.FromQq)
+                        .Text("账号尚未绑定！")
+                        .Done();
+                    return;
+                }
+                oprt = new DataOprt();
+                if (oprt.SetAuto(context.FromQq))
+                    _mahuaApi.SendPrivateMessage(context.FromQq)
+                        .Text("设定自动打卡成功！")
+                        .Done();
+                else _mahuaApi.SendPrivateMessage(context.FromQq)
+                        .Text("你已经设定了自动打卡！")
+                        .Done();
+                oprt.Close();
+            }
+            else if (res[0] == "#取消自动")
+            {
+                DataOprt oprt = new DataOprt();
+                if (oprt.DelAuto(context.FromQq))
+                    _mahuaApi.SendPrivateMessage(context.FromQq)
+                        .Text("成功取消自动打卡！")
+                        .Done();
+                else _mahuaApi.SendPrivateMessage(context.FromQq)
+                        .Text("你设定自动打卡！")
+                        .Done();
+                oprt.Close();
             }
             else if (res[0] == "#设置")
             {
@@ -179,6 +266,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                     iserr = true;
                     _mahuaApi.SendPrivateMessage(context.FromQq)
                     .Text("打卡失败，错误原因：" + e.Message.ToString())
+                    .Text("\n 请翻阅此QQ的空间了解更新信息~")
                     .Done();
                 }
                 if (!iserr && isright == "无错")
@@ -188,12 +276,14 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                     _mahuaApi.SendPrivateMessage(context.FromQq)
                     .Text("打卡成功！\n")
                     .Text(attetion)
+                    .Text("\n 请翻阅此QQ的空间了解更新信息~")
                     .Done();
                 }
                 else
                 {
                     _mahuaApi.SendPrivateMessage(context.FromQq)
                     .Text("打卡失败，错误原因：" + Output.ToString())
+                    .Text("\n 请翻阅此QQ的空间了解更新信息~")
                     .Done();
                 }
             }

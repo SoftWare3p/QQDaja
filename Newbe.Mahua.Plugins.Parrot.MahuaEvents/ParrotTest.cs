@@ -25,7 +25,7 @@ namespace Newbe.Mahua.Plugins.Parrot.Tests
             // Arrange 对单元测试中需要测试的准备参数进行初始化
             // Action 执行需要测试的逻辑
             // Assert 对测试结果是否正确进行判断
-            using (var mocker = AutoMock.GetStrict())
+            using (var mocker = AutoMock.GetLoose())
             {
                 // Moq的参数，确定在整个单元测试结束之后，所有被模拟的方法都已经被执行。
                 mocker.VerifyAll = true;
@@ -70,20 +70,20 @@ namespace Newbe.Mahua.Plugins.Parrot.Tests
                     Message = "#群内查询",
                     SendTime = DateTime.Now
                 }); */
-                event1.ProcessFriendMessage(new PrivateMessageFromFriendReceivedContext
+                /*event1.ProcessFriendMessage(new PrivateMessageFromFriendReceivedContext
                 {
                     FromQq = "318167525",
                     Message = "#debug"
-                });/**/
+                });*/
                 /*event3.Initialized(new InitializedContext
                 {
                 });*/
-                /*event2.ProcessGroupMessage(new PrivateMessageFromGroupReceivedContext
+                event2.ProcessGroupMessage(new PrivateMessageFromGroupReceivedContext
                 {
                     FromGroup = "109228848",
                     FromQq = "2081559194",
-                    Message = "#注册提醒"
-                });*/
+                    Message = "#自动打卡"
+                });/**/
                 #endregion
 
                 #region Assert
