@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newbe.Mahua.Plugins.Parrot", "Newbe.Mahua.Plugins.Parrot\Newbe.Mahua.Plugins.Parrot.csproj", "{DD0BBAFB-9C43-4E71-8357-FE878F347995}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newbe.Mahua.Plugins.Parrot.MahuaEvents", "Newbe.Mahua.Plugins.Parrot.MahuaEvents\Newbe.Mahua.Plugins.Parrot.MahuaEvents.csproj", "{DA07C42B-4CEB-40BF-847E-5FCD19443843}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newbe.Mahua.Plugins.Parrot.Tests", "Newbe.Mahua.Plugins.Parrot.MahuaEvents\Newbe.Mahua.Plugins.Parrot.Tests.csproj", "{DA07C42B-4CEB-40BF-847E-5FCD19443843}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleWeb", "ConsoleWeb\ConsoleWeb.csproj", "{EA9C8902-C207-4C21-A674-2B7038C06F25}"
 EndProject
