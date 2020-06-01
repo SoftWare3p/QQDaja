@@ -37,24 +37,26 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                             .Text("指令错误！")
                             .Done();
             }
+            else if (res[0] == "#解绑")
+            {
+                DataOprt data = new DataOprt();
+                if (data.deleteAcc(context.FromQq) == 0)
+                {
+                    _mahuaApi.SendPrivateMessage(context.FromQq)
+                           .Text("你还没有绑定账户！")
+                           .Done();
+                }
+                else
+                {
+                    _mahuaApi.SendPrivateMessage(context.FromQq)
+                           .Text("解除绑定成功！")
+                           .Done();
+                }
+            }
             else if (res[0] == "#help")
             {
                 _mahuaApi.SendPrivateMessage(context.FromQq)
-                 .Text("私聊发送“#账号 教务处账号 密码”以绑定账号")
-                 .Newline()
-                 .Text("私聊发送“#设置 数字1 数字2 数字3 数字4 数字5”以设置个人健康现状的部分项目（详细请参见此QQ的空间说说）")
-                 .Newline()
-                 .Text("私聊发送“#解绑”以取消绑定账号")
-                 .Newline()
-                 .Text("私聊发送“#注册提醒”，如果你当天未使用机器人打卡，机器人将在21点后提醒你，私聊发送“#取消提醒”可取消")
-                 .Newline()
-                 .Text("私聊发送“#自动打卡”，机器人会在当天中午12点打卡，私聊发送“#取消自动”可取消")
-                 .Newline()
-                 .Text(@"在群内\私聊发送“#打卡”以打卡")
-                 .Newline()
-                 .Text(@"在群内\私聊发送#统计信息 以统计打卡信息（当天人数）")
-                 .Newline()
-                 .Text(@"在群内\私聊发送#程序信息 以查看此程序的一些没什么用的信息")
+                 .Text(Pick.Help())
                  .Done();
             }
             else if (res[0] == "#自动打卡")
@@ -162,6 +164,16 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                     .Done();
                 oprt1.Close();
             }
+            else if (res[0] == "#反馈")
+            {
+                _mahuaApi.SendPrivateMessage(@"1307650694")
+                    .Text(context.FromQq).Newline()
+                                .Text(context.Message)
+                                .Done();
+                _mahuaApi.SendPrivateMessage(context.FromQq)
+                    .Text("反馈成功！")
+                    .Done();
+            }
             else if(res[0] == "#注册提醒")
             {
                 DataOprt oprt = new DataOprt();
@@ -187,7 +199,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaEvents
                        .Done();
                 }
             }
-            else if (res[0] == "#删除提醒")
+            else if (res[0] == "#取消提醒")
             {
                 DataOprt oprt = new DataOprt();
                 if (oprt.DeleteTips(context.FromQq))

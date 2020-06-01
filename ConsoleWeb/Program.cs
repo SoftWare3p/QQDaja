@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace ConsoleWeb
 {
@@ -31,53 +32,61 @@ namespace ConsoleWeb
         {
             private static AutoResetEvent DocComplete = new AutoResetEvent(false);
             string source;
-            public static void initWebVisit()
-            {
-                var settings = new CefSettings()
-                {
-                    //By default CefSharp will use an in-memory cache, you need to specify a Cache Folder to persist data
-                    Locale = "zh-CN",
-                    BrowserSubprocessPath = @"\CefSharp.BrowserSubprocess.exe",
-                    CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache")
-                };
-                CefSharp.Cef.Initialize(settings, performDependencyCheck: true, browserProcessHandler: null);
-            }
             public ChromiumWebBrowser browser;
             async void browser_FrameLoadEnd(object sender, CefSharp.FrameLoadEndEventArgs e)
             {
                 source = await browser.GetSourceAsync();
                 DocComplete.Set();
             }
-            void getNearest()
-            {
-                int index = source.IndexOf(@">&nbsp;</td>");
-                if (index == -1)
+            bool isf = false;
+            void getNearest(string s, int index)
+            { 
+                int index1 = s.IndexOf(@">&nbsp;</td>");
+                if (index1 == -1)
                 {
                     Console.WriteLine(@"没有遗漏打卡的记录");
                     return;
                 }
-                string res = source.Substring(index);
-                source = source.Substring(index);
-                int index1 = res.IndexOf(@"疫情防控——师生健康状态采集");
-                res = res.Substring(index1 - 4, 4);
+                s = s.Substring(index1);
+                index1 = 0;
+                int pos = s.IndexOf(@"成都信息工程大学2020年春季学期");
+                int index2 = s.IndexOf(@"疫情防控——师生健康状态采集");
+                if (pos != -1)
+                {
+                    if (pos > index1 && pos < index2)
+                    {
+                        s = s.Substring(pos+1);
+                        getNearest(s, 0);
+                        return;
+                    }
+                }
+                string res = s.Substring(index2 - 4, 4);
                 int day = (res[2] - '0') * 10 + (res[3] - '0');
                 int month = (res[0] - '0') * 10 + (res[1] - '0');
                 if (System.DateTime.Now.Day == day && System.DateTime.Now.Month == month)
                 {
-                    res = source.Substring(index1 + 5);
-                    index = res.IndexOf(@">&nbsp;</td>");
-                    if (index == -1)
-                    {
-                        Console.WriteLine(@"没有遗漏打卡的记录");
-                        return;
-                    }
-                    res = res.Substring(index);
-                    index1 = res.IndexOf(@"疫情防控——师生健康状态采集");
-                    res = res.Substring(index1 - 4, 4);
-                    day = (res[2] - '0') * 10 + (res[3] - '0');
-                    month = (res[0] - '0') * 10 + (res[1] - '0');
+                    isf = true;
+                    s = s.Substring(index2+1);
+                    getNearest(s, 0);
+                    return;
                 }
-                Console.WriteLine(@"你最近一次遗漏打卡的时间是在" + month + "月" + day + "日");
+                else
+                {
+                    if(!isf)
+                        Console.WriteLine(@"你今天已经录入过健康打卡，本次可能为你覆盖了之前的设置。此外");
+                    DateTime dNow = DateTime.Now;
+                    int yearadd = 0;
+                    if (dNow.Month < month) yearadd = 1;
+                    DateTime dpre = new DateTime(dNow.Year-yearadd, month, day, dNow.Hour, dNow.Minute, dNow.Second);
+                    if((dNow - dpre).Days > 15)
+                    {
+                        Console.WriteLine(@"你最近15天没有遗漏打卡的记录");
+                    }
+                    else
+                    {
+                        Console.WriteLine(@"你最近一次遗漏打卡的时间是在" + month + "月" + day + "日");
+                    }
+                }
             }
             private static void theout(object sender, System.Timers.ElapsedEventArgs e)
             {
@@ -86,7 +95,7 @@ namespace ConsoleWeb
             }
             public void daka(string[] str)
             {
-                //initWebVisit();
+                isf = false;
                 System.Timers.Timer t = new System.Timers.Timer(10000);
                 t.Elapsed += new System.Timers.ElapsedEventHandler(theout);
                 t.AutoReset = false;//设置是执行一次（false）还是一直执行(true)； 
@@ -101,7 +110,7 @@ namespace ConsoleWeb
                 DocComplete.WaitOne();
                 browser.Load(@"http://jszx-jxpt.cuit.edu.cn/Jxgl/Xs/netks/sj.asp");
                 DocComplete.WaitOne();
-                getNearest();
+                getNearest(source, 0);
                 script = @"document.getElementsByTagName('a')[1].click();";
                 browser.GetBrowser().MainFrame.ExecuteJavaScriptAsync(script);
                 DocComplete.WaitOne();

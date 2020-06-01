@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Threading;
+
 namespace Newbe.Mahua.Plugins.Parrot.MahuaService
 {
     public interface ITickServices
@@ -59,7 +61,7 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaService
                 });
                 dataOprt.Close();
             }
-            else if (System.DateTime.Now.Hour == 12)
+            else if (System.DateTime.Now.Hour == 11)
             {
                 Newbe.Mahua.Plugins.Parrot.MahuaEvents.DataOprt dataOprt = new Newbe.Mahua.Plugins.Parrot.MahuaEvents.DataOprt();
                 System.Data.DataSet list = dataOprt.getAutoList();
@@ -74,7 +76,11 @@ namespace Newbe.Mahua.Plugins.Parrot.MahuaService
                                 var api = robotSession.MahuaApi;
                                 api.SendPrivateMessage(qq, msg);
                             }
-                        }); 
+                        });
+                    if (((i + 1) % 5 == 0) && (i != list.Tables[0].Rows.Count - 1))
+                    {
+                        Thread.Sleep(1000 * 60);
+                    }
                 }
             }
         }
