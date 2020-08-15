@@ -49,7 +49,7 @@ namespace ConsoleWeb
                 }
                 s = s.Substring(index1);
                 index1 = 0;
-                int pos = s.IndexOf(@"成都信息工程大学2020年春季学期");
+                int pos = s.IndexOf(@"成都信息工程大学2020年秋季学期");
                 int index2 = s.IndexOf(@"疫情防控——师生健康状态采集");
                 if (pos != -1)
                 {
@@ -97,7 +97,7 @@ namespace ConsoleWeb
             {
                 isf = false;
                 System.Timers.Timer t = new System.Timers.Timer(10000);
-                t.Elapsed += new System.Timers.ElapsedEventHandler(theout);
+                //t.Elapsed += new System.Timers.ElapsedEventHandler(theout);
                 t.AutoReset = false;//设置是执行一次（false）还是一直执行(true)； 
                 t.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
                 browser = new ChromiumWebBrowser(@"http://login.cuit.edu.cn/Login/xLogin/Login.asp");
@@ -111,7 +111,7 @@ namespace ConsoleWeb
                 browser.Load(@"http://jszx-jxpt.cuit.edu.cn/Jxgl/Xs/netks/sj.asp");
                 DocComplete.WaitOne();
                 getNearest(source, 0);
-                script = @"document.getElementsByTagName('a')[1].click();";
+                script = @"document.getElementsByTagName('a')[0].click();";
                 browser.GetBrowser().MainFrame.ExecuteJavaScriptAsync(script);
                 DocComplete.WaitOne();
                 browser.JsDialogHandler = new JsDialogHandler();
